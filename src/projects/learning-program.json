@@ -1,0 +1,6 @@
+{
+  "title": "Chinese screen reader",
+  "thumbnail": "@/projects/images/learning_app.png",
+  "text": "An app that I've been developing, it can be popped up on your screen with a shortcut of your choice, it can read your screen with ocr or you can input text into it and it will interpret the chinese and give you the pronunciation guide. The plan is to also add ability to use translation API access.<br><br><FontAwesomeIcon :icon=\"byPrefixAndName.fab['github']\" /><a href='https://github.com/miikamenk/learning-app' target='_blank'>Github link</a>.",
+  "uploadDate": "2025-08-28"
+}
