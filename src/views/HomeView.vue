@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import VimEmulator from '../components/VimEmulator.vue'
+import AboutPage from '../components/AboutPage.vue'
 </script>
 
 <template>

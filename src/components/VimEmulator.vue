@@ -3,9 +3,13 @@ import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
 
 //config
 const MESSAGE = `Hi, I'm miikamenk
-Software dev mostly focused on backend.
-I like building custom keyboards, coding, linux and vim.
-Try out this interactive vim terminal I made and check out the rest of my website.`
+Full-Stack Software dev with a passion for all kinds of tech.
+I like building custom electronics, like custom keyboards.
+
+I'm also really into Linux, Vim and bleeding edge tech.
+
+I'm an advocator for open source sofware and hardware.
+Try out this interactive vim terminal I whipped up and check out the rest of my website.`
 const TYPE_DELAY = 40 // ms/char
 const PLACEHOLDER_LINES = 8 // leading tildes like Vim
 
