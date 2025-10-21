@@ -53,7 +53,7 @@ function closeProject() {
         <img
           :src="project.thumbnail"
           :alt="project.title"
-          @error="$event.target.src = fallbackSvg"
+          @error="(e) => ((e.target as HTMLImageElement).src = fallbackSvg)"
         />
         <h3>{{ project.title }}</h3>
       </div>
@@ -67,7 +67,7 @@ function closeProject() {
         <img
           class="modal-img"
           :src="selectedProject.thumbnail"
-          @error="$event.target.style.display = 'none'"
+          @error="(e) => ((e.target as HTMLImageElement).style.display = 'none')"
         />
         <p class="text" v-html="selectedProject.text"></p>
       </div>
