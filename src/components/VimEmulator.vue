@@ -181,9 +181,9 @@ function insertChars(ch) {
 }
 
 function backspaceChar() {
-  if (cursor.value === 0) return
-  setText(cursor.value - 1, cursor.value)
-  moveCursorTo(cursor.value - 0) // stay at same visual col
+  if (cursor.value === 0) return // nothing to delete
+  setText(cursor.value - 1, cursor.value) // remove the character before the cursor
+  moveCursorTo(cursor.value - 1) // move cursor left to reflect deletion
 }
 
 function deleteCharUnderCursor() {
