@@ -19,7 +19,6 @@ function toggleMenu() {
 
       <nav class="desktop-nav">
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
         <RouterLink to="/projects">Projects</RouterLink>
         <RouterLink to="/contact">Contact</RouterLink>
       </nav>
@@ -28,7 +27,6 @@ function toggleMenu() {
         <button @click="toggleMenu" class="menu-button">☰</button>
         <div v-if="isMenuOpen" class="dropdown-menu">
           <RouterLink to="/" @click="toggleMenu">Home</RouterLink>
-          <RouterLink to="/about" @click="toggleMenu">About</RouterLink>
           <RouterLink to="/projects" @click="toggleMenu">Projects</RouterLink>
           <RouterLink to="/contact" @click="toggleMenu">Contact</RouterLink>
         </div>
@@ -53,8 +51,6 @@ header {
 }
 
 .content {
-  grid-column: 1 / -1;
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   padding-top: calc(2rem + 80px);

@@ -1,22 +1,48 @@
 <script setup>
-import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed, nextTick, watch } from 'vue'
 
 //config
-const MESSAGE = `Hi, I'm miikamenk
-Full-Stack Software dev with a passion for all kinds of tech.
-I like building custom electronics, like custom keyboards.
+const MESSAGE = `<div class="card">
+  <h1>Hi, I'm miikamenk</h1>
+  <h2>Full-Stack Software Developer</h2><br/>
 
-I'm also really into Linux, Vim and bleeding edge tech.
+  <p>
+    Passionate about all kinds of tech especially building custom electronics,
+    like mechanical keyboards and audio gear.
+  </p><br/>
 
-I'm an advocator for open source sofware and hardware.
-Try out this interactive vim terminal I whipped up and check out the rest of my website.`
+  <p>
+    I’m really into Linux, Vim, and bleeding-edge tooling.
+  </p><br/>
+
+  <p>
+    Advocate for open-source software and hardware.
+    Try out this interactive Vim terminal I built and explore the rest of my site!
+  </p>
+</div>
+
+<style>
+.card {
+  background: var(--color-background-soft);
+  padding: 2rem 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.6s ease;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+`
 const TYPE_DELAY = 40 // ms/char
-const PLACEHOLDER_LINES = 8 // leading tildes like Vim
+const PLACEHOLDER_LINES = 0 // leading tildes like Vim
 
 // state controls
-const text = ref('') // visible buffer
+const text = ref(MESSAGE) // visible buffer
+const buffer = ref(null)
 const cursor = ref(0) // index in text
-const typingDone = ref(false)
+const typingDone = ref(true)
 const insertMode = ref(false)
 
 const pendingOp = ref(null) // 'd' | null
@@ -122,6 +148,26 @@ function moveDown() {
   const nextLen = nextEnd - nextStart
   const col = desiredCol ?? getLineCol(cursor.value).col
   moveCursorTo(nextStart + Math.min(col, nextLen))
+}
+
+function ensureCursorVisible(padding = 8) {
+  const container = buffer.value
+  if (!container) return
+  const cursorEl = container.querySelector('.cursor')
+  if (!cursorEl) return
+
+  // position of cursor relative to the container
+  const curTop = cursorEl.offsetTop
+  const curBottom = curTop + cursorEl.offsetHeight
+
+  const viewTop = container.scrollTop
+  const viewBottom = viewTop + container.clientHeight
+
+  if (curTop < viewTop + padding) {
+    container.scrollTop = Math.max(0, curTop - padding)
+  } else if (curBottom > viewBottom - padding) {
+    container.scrollTop = curBottom - container.clientHeight + padding
+  }
 }
 
 // editing primitives
@@ -287,9 +333,18 @@ function onKeydown(e) {
   }
 }
 
+function getText() {
+  return text.value
+}
+defineExpose({ getText })
+
+watch(cursor, () => {
+  nextTick(ensureCursorVisible)
+})
+
 onMounted(() => {
   window.addEventListener('keydown', onKeydown)
-  startTyping()
+  // startTyping() -- did not age well with the rendering view
 })
 
 onBeforeUnmount(() => {
@@ -300,10 +355,10 @@ onBeforeUnmount(() => {
 
 <template>
   <section class="vim-wrap">
-    <div class="vim-window" @click="skipTyping">
+    <div class="vim-window">
       <div class="vim-title">— VIM —</div>
 
-      <div class="vim-buffer" aria-live="polite" aria-atomic="true">
+      <div class="vim-buffer" ref="buffer" aria-live="polite" aria-atomic="true">
         <pre class="vim-line" v-for="n in PLACEHOLDER_LINES" :key="n">~</pre>
         <pre class="vim-text">
 <span>{{ beforeText }}</span><span class="cursor" :class="{ off: !insertMode && typingDone }">█</span><span>{{ afterText }}</span>
@@ -337,10 +392,10 @@ onBeforeUnmount(() => {
   display: grid;
   gap: 1rem;
   place-items: center;
-  padding: 4rem 1rem;
 }
 .vim-window {
-  width: min(900px, 95vw);
+  width: 85vw;
+  height: 50vh;
   border-radius: 0.75rem;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
@@ -366,8 +421,15 @@ onBeforeUnmount(() => {
 .vim-buffer {
   padding: 1rem 0.75rem 1.25rem;
   min-height: 220px;
+  height: calc(50vh - 60px);
   color: #a7f3d0;
   background: #000;
+  overflow: auto;
+  -ms-overflwow-style: none;
+  scrollbar-width: none;
+}
+.vim-buffer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
 }
 .vim-line,
 .vim-text {
