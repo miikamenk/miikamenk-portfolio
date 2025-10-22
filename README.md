@@ -1,5 +1,6 @@
 # miikamenk-portfolio
 
-# todo list
+## todo list
 
-- [x] make the vim live edit markdown into html
+- [x] make the vim emulator render html
+- [ ] fix mobile view
